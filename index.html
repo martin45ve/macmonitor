@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MacMonitor Sensors — Install</title>
+<meta name="description" content="Free helper that adds temperatures, fan speeds, power and per-core speeds to MacMonitor.">
+<link rel="icon" href="icon.png">
+<style>
+  :root {
+    --bg: #0b0b0f; --card: rgba(255,255,255,0.06); --line: rgba(255,255,255,0.10);
+    --text: #f2f2f7; --muted: #a1a1aa; --amber: #ffb340; --amber2: #ff8a22;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: radial-gradient(1200px 600px at 70% -10%, #2a2030 0%, var(--bg) 60%);
+    color: var(--text); font: 17px/1.55 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--amber); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+  header { display: flex; align-items: center; gap: 12px; padding: 22px 0; }
+  header img { width: 36px; height: 36px; }
+  header b { font-size: 18px; }
+  nav { margin-left: auto; display: flex; gap: 22px; font-size: 15px; }
+  nav a { color: var(--muted); text-decoration: none; }
+  nav a:hover { color: var(--text); }
+
+  .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; padding: 40px 0 70px; }
+  .hero h1 { font-size: 48px; line-height: 1.08; margin: 0 0 18px; letter-spacing: -0.02em; }
+  .hero h1 span { background: linear-gradient(90deg, var(--amber), var(--amber2)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p { color: var(--muted); font-size: 19px; margin: 0 0 30px; }
+  .install {
+    display: inline-flex; align-items: center; gap: 12px; padding: 16px 30px; border-radius: 16px;
+    background: linear-gradient(180deg, var(--amber), var(--amber2)); color: #1a1205; font-weight: 700; font-size: 19px;
+    text-decoration: none; box-shadow: 0 10px 30px rgba(255,150,40,0.25);
+  }
+  .install:hover { filter: brightness(1.06); }
+  .install svg { width: 22px; height: 22px; }
+  .small { color: var(--muted); font-size: 14px; margin-top: 14px; }
+  .shot { justify-self: center; max-width: 340px; width: 100%; border-radius: 26px; box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+
+  .demo { width:100%; border-radius:18px; border:1px solid var(--line); box-shadow:0 30px 80px rgba(0,0,0,0.5); margin:0 0 34px; display:block; background:#000; }
+  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  h2 { font-size: 32px; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .lead { color: var(--muted); margin: 0 0 30px; }
+
+  .tabs { display: inline-flex; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 4px; margin-bottom: 26px; }
+  .tabs button { border: 0; background: none; color: var(--muted); font: inherit; font-size: 15px; padding: 8px 18px; border-radius: 9px; cursor: pointer; }
+  .tabs button.on { background: rgba(255,255,255,0.12); color: var(--text); }
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; counter-reset: s; }
+  .step { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px; }
+  .step::before { counter-increment: s; content: counter(s); display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--amber); color: #1a1205; font-weight: 700; margin-bottom: 12px; }
+  .step h3 { margin: 0 0 6px; font-size: 17px; }
+  .step p { margin: 0; color: var(--muted); font-size: 15px; }
+  .lang { border: 1px solid var(--line); border-radius: 8px; padding: 2px 10px; color: var(--text) !important; }
+  .browser { display: none; } .browser.on { display: block; }
+
+  .features { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .feature { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 22px; }
+  .feature b { display: block; margin-bottom: 4px; }
+  .feature span { color: var(--muted); font-size: 15px; }
+
+  .text p { color: var(--muted); max-width: 760px; }
+  footer { padding: 34px 0 50px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; } .hero h1 { font-size: 38px; }
+    .steps, .features { grid-template-columns: 1fr 1fr; }
+    nav a:not(.lang) { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="icon.png" alt="">
+    <b>MacMonitor</b>
+    <nav>
+      <a href="#install" data-t="navInstall">Install</a>
+      <a href="#privacy" data-t="navPrivacy">Privacy</a>
+      <a href="#support" data-t="navSupport">Support</a>
+      <a href="#" id="lang" class="lang">Español</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <h1 data-t="h1">See your Mac's <span>temperatures, fans, power</span> and every core.</h1>
+      <p data-t="heroP">MacMonitor Sensors is the free helper for MacMonitor. Install it once — it runs quietly in the background and fills in the panels automatically.</p>
+      <a class="install" href="https://github.com/martin45ve/macmonitor/releases/latest/download/MacMonitor-Sensors.pkg">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm0 15-5-5h3V7h4v5h3l-5 5Z"/></svg>
+        <span data-t="installBtn">Install Sensors</span>
+      </a>
+      <div class="small" data-t="small">Free · macOS 15 or later · Apple silicon · Signed and notarized by Apple</div>
+    </div>
+    <img class="shot" src="panels.png" alt="MacMonitor panels on the desktop">
+  </div>
+
+  <section id="install">
+    <h2 data-t="installH">Install in 4 clicks</h2>
+    <video class="demo" src="install.mp4" poster="install-poster.jpg" autoplay muted loop playsinline controls preload="metadata"></video>
+    <p class="lead" data-t="installLead">Choose your browser to see where the download appears.</p>
+    <div class="tabs" role="tablist">
+      <button data-b="safari">Safari</button>
+      <button data-b="chrome">Chrome</button>
+      <button data-b="firefox">Firefox</button>
+    </div>
+
+    <div class="browser" id="b-safari">
+      <div class="steps">
+        <div class="step"><h3 data-t="s1h">Click Install Sensors</h3><p data-t="s1p">The button above downloads the installer.</p></div>
+        <div class="step"><h3 data-t="s2h">Open the download</h3><p data-t="s2safari">Click the <b>download arrow</b> at the top right of Safari, then click <b>MacMonitor-Sensors.pkg</b>.</p></div>
+        <div class="step"><h3 data-t="s3h">Continue → Install</h3><p data-t="s3p">Follow the installer and enter your <b>Mac's password</b> when asked.</p></div>
+        <div class="step"><h3 data-t="s4h">Done</h3><p data-t="s4p">Within a few seconds, MacMonitor shows temperatures, fans, power and every core.</p></div>
+      </div>
+    </div>
+    <div class="browser" id="b-chrome">
+      <div class="steps">
+        <div class="step"><h3 data-t="s1h">Click Install Sensors</h3><p data-t="s1p">The button above downloads the installer.</p></div>
+        <div class="step"><h3 data-t="s2h">Open the download</h3><p data-t="s2chrome">Click the <b>download icon</b> at the top right of Chrome, then click <b>MacMonitor-Sensors.pkg</b>.</p></div>
+        <div class="step"><h3 data-t="s3h">Continue → Install</h3><p data-t="s3p">Follow the installer and enter your <b>Mac's password</b> when asked.</p></div>
+        <div class="step"><h3 data-t="s4h">Done</h3><p data-t="s4p">Within a few seconds, MacMonitor shows temperatures, fans, power and every core.</p></div>
+      </div>
+    </div>
+    <div class="browser" id="b-firefox">
+      <div class="steps">
+        <div class="step"><h3 data-t="s1h">Click Install Sensors</h3><p data-t="s1p">The button above downloads the installer.</p></div>
+        <div class="step"><h3 data-t="s2h">Open the download</h3><p data-t="s2firefox">Click the <b>download arrow</b> in Firefox's toolbar, then click <b>MacMonitor-Sensors.pkg</b>.</p></div>
+        <div class="step"><h3 data-t="s3h">Continue → Install</h3><p data-t="s3p">Follow the installer and enter your <b>Mac's password</b> when asked.</p></div>
+        <div class="step"><h3 data-t="s4h">Done</h3><p data-t="s4p">Within a few seconds, MacMonitor shows temperatures, fans, power and every core.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 data-t="addsH">What Sensors adds</h2>
+    <p class="lead" data-t="addsLead">The App Store version of MacMonitor can't read these on its own. The helper can.</p>
+    <div class="features">
+      <div class="feature"><b data-t="f1h">Chip temperature</b><span data-t="f1p">The hottest core, live.</span></div>
+      <div class="feature"><b data-t="f2h">Fan speed</b><span data-t="f2p">Average of all fans, in RPM.</span></div>
+      <div class="feature"><b data-t="f3h">Power</b><span data-t="f3p">Whole-Mac watts, plus GPU and Neural Engine.</span></div>
+      <div class="feature"><b data-t="f4h">Every core</b><span data-t="f4p">Speed of each CPU core and the GPU.</span></div>
+    </div>
+  </section>
+
+  <section id="privacy" class="text">
+    <h2 data-t="privacyH">Privacy</h2>
+    <p data-t="pr1"><b>MacMonitor and MacMonitor Sensors collect no data.</b> Nothing is sent to the internet, there are no accounts, no analytics and no tracking.</p>
+    <p data-t="pr2">Sensor readings stay on your Mac: the helper shares them only with MacMonitor, through a private folder that both apps use.</p>
+    <p data-t="pr3">MacMonitor asks for Location access only because macOS shows Wi-Fi network names just to apps that have it. Your location is never read, stored or shared.</p>
+  </section>
+
+  <section id="support" class="text">
+    <h2 data-t="supportH">Support</h2>
+    <p data-t="su1"><b>To remove the helper:</b> open MacMonitor Sensors from Applications, click <b>Quit Sensors</b>, then move it to the Trash. You can also turn it off in System Settings → General → Login Items.</p>
+    <p data-t="su2"><b>Questions or problems?</b> Open a request on <a href="https://github.com/martin45ve/macmonitor/issues">GitHub Issues</a>. Right-click a panel → <b>Export Diagnostics</b> and attach the file — it helps a lot.</p>
+  </section>
+
+  <footer>© 2026 Martin Garrido · MacMonitor · <a href="privacy.html">Privacy</a></footer>
+</div>
+
+<script>
+  // Show the steps for the visitor's browser first.
+  const ua = navigator.userAgent;
+  let current = /Firefox\//.test(ua) ? "firefox" : /Chrome\//.test(ua) && !/Edg\//.test(ua) ? "chrome" : "safari";
+  function show(b) {
+    document.querySelectorAll(".tabs button").forEach(x => x.classList.toggle("on", x.dataset.b === b));
+    document.querySelectorAll(".browser").forEach(x => x.classList.toggle("on", x.id === "b-" + b));
+  }
+  document.querySelectorAll(".tabs button").forEach(x => x.addEventListener("click", () => show(x.dataset.b)));
+  show(current);
+
+  // Spanish text; English is what's written in the page.
+  const ES = {
+    navInstall: "Instalar", navPrivacy: "Privacidad", navSupport: "Soporte",
+    h1: "Mira las <span>temperaturas, ventiladores, consumo</span> y cada núcleo de tu Mac.",
+    heroP: "MacMonitor Sensors es el complemento gratis de MacMonitor. Instálalo una vez: trabaja en silencio en segundo plano y llena los paneles automáticamente.",
+    installBtn: "Instalar Sensors",
+    small: "Gratis · macOS 15 o posterior · Apple silicon · Firmado y notarizado por Apple",
+    installH: "Instálalo en 4 clics",
+    installLead: "Elige tu navegador para ver dónde aparece la descarga.",
+    s1h: "Haz clic en Instalar Sensors", s1p: "El botón de arriba descarga el instalador.",
+    s2h: "Abre la descarga",
+    s2safari: "Haz clic en la <b>flecha de descargas</b> arriba a la derecha de Safari y luego en <b>MacMonitor-Sensors.pkg</b>.",
+    s2chrome: "Haz clic en el <b>ícono de descargas</b> arriba a la derecha de Chrome y luego en <b>MacMonitor-Sensors.pkg</b>.",
+    s2firefox: "Haz clic en la <b>flecha de descargas</b> de la barra de Firefox y luego en <b>MacMonitor-Sensors.pkg</b>.",
+    s3h: "Continuar → Instalar", s3p: "Sigue el instalador y escribe la <b>contraseña de tu Mac</b> cuando te la pida.",
+    s4h: "Listo", s4p: "En unos segundos, MacMonitor muestra temperaturas, ventiladores, consumo y cada núcleo.",
+    addsH: "Lo que agrega Sensors",
+    addsLead: "La versión de MacMonitor de la App Store no puede leer esto por sí sola. El complemento sí.",
+    f1h: "Temperatura del chip", f1p: "El núcleo más caliente, en vivo.",
+    f2h: "Ventiladores", f2p: "Promedio de todos los ventiladores, en RPM.",
+    f3h: "Consumo", f3p: "Watts de toda la Mac, más GPU y Neural Engine.",
+    f4h: "Cada núcleo", f4p: "Velocidad de cada núcleo del CPU y del GPU.",
+    privacyH: "Privacidad",
+    pr1: "<b>MacMonitor y MacMonitor Sensors no recogen ningún dato.</b> No se envía nada a internet: no hay cuentas, ni estadísticas, ni rastreo.",
+    pr2: "Las lecturas de los sensores se quedan en tu Mac: el complemento solo las comparte con MacMonitor, a través de una carpeta privada que usan las dos apps.",
+    pr3: "MacMonitor pide acceso a la Ubicación solo porque macOS muestra los nombres de las redes Wi-Fi únicamente a las apps que lo tienen. Tu ubicación nunca se lee, se guarda ni se comparte.",
+    supportH: "Soporte",
+    su1: "<b>Para quitar el complemento:</b> abre MacMonitor Sensors desde Aplicaciones, haz clic en <b>Quit Sensors</b> y muévelo a la Papelera. También puedes desactivarlo en Ajustes del Sistema → General → Ítems de inicio.",
+    su2: "<b>¿Preguntas o problemas?</b> Abre una solicitud en <a href=\"https://github.com/martin45ve/macmonitor/issues\">GitHub Issues</a>. Haz clic derecho en un panel → <b>Export Diagnostics</b> y adjunta el archivo: ayuda mucho.",
+  };
+  const EN = {};
+  document.querySelectorAll("[data-t]").forEach(el => EN[el.dataset.t] = el.innerHTML);
+  function setLang(lang) {
+    const dict = lang === "es" ? ES : EN;
+    document.querySelectorAll("[data-t]").forEach(el => { if (dict[el.dataset.t]) el.innerHTML = dict[el.dataset.t]; });
+    document.documentElement.lang = lang;
+    document.getElementById("lang").textContent = lang === "es" ? "English" : "Español";
+    try { localStorage.setItem("lang", lang); } catch (e) {}
+  }
+  let lang = "en";
+  try { lang = localStorage.getItem("lang") || ((navigator.language || "").startsWith("es") ? "es" : "en"); } catch (e) {}
+  setLang(lang);
+  document.getElementById("lang").addEventListener("click", e => {
+    e.preventDefault();
+    setLang(document.documentElement.lang === "es" ? "en" : "es");
+  });
+</script>
+</body>
+</html>
